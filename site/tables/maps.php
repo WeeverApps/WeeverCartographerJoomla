@@ -21,30 +21,25 @@
 
 defined('_JEXEC') or die;
 
-require_once JPATH_COMPONENT.DS.'helpers'.DS.'config'.'.php';
-JTable::addIncludePath(JPATH_COMPONENT.DS.'tables');
-
-jimport('joomla.application.component.controller');
-
-class WeeverCartographerController extends JController
+class TableWeeverCartographerMaps extends JTable
 {
 
-	public function display()
+	public 	$id 					= 0;
+	public 	$component_id			= null;
+	public 	$component				= null;
+	public 	$altitude				= 0;
+	public	$location				= null;
+	public	$address				= null;
+	public	$label					= null;
+	public	$kml					= null;
+	public	$marker					= null;
+	
+	public function __construct(&$db)
 	{
 	
-		$view = JRequest::getVar('view');
-		
-		if(!$view)
-		{
-			JRequest::setVar('view','feed');
-		}
-		
-		parent::display();
-	
+		parent::__construct('#__weever_maps', 'id', $db);
+			
 	}
-	
-}
 
-$controller = new WeeverCartographerController();
-$controller->execute();
-$controller->redirect();
+
+}

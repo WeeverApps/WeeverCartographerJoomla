@@ -21,30 +21,21 @@
 
 defined('_JEXEC') or die;
 
-require_once JPATH_COMPONENT.DS.'helpers'.DS.'config'.'.php';
-JTable::addIncludePath(JPATH_COMPONENT.DS.'tables');
+jimport('joomla.application.component.view');
 
-jimport('joomla.application.component.controller');
-
-class WeeverCartographerController extends JController
+class WeeverCartographerViewConfig extends JView
 {
 
-	public function display()
+	public function display($tpl = null)
 	{
-	
-		$view = JRequest::getVar('view');
+
+		$json = json_encode( $this->get('feedData') );
 		
-		if(!$view)
-		{
-			JRequest::setVar('view','feed');
-		}
-		
-		parent::display();
+		// output JSON feed, gracefully exit
+		print_r($json);
+		jexit();
+
 	
 	}
 	
 }
-
-$controller = new WeeverCartographerController();
-$controller->execute();
-$controller->redirect();
