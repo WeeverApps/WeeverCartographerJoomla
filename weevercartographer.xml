@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="component" version="1.7" method="upgrade">
 
-	<name>COM_WEEVER_CARTOGRAPHER</name>
+	<name>COM_WEEVERCARTOGRAPHER</name>
 	<creationDate>January 25, 2012</creationDate>
 	<author>Robert Gerald Porter</author>
 	<authorEmail>rob@weeverapps.com</authorEmail>
@@ -9,7 +9,16 @@
 	<copyright>(c) 2010-2012 Weever Apps Inc.</copyright>
 	<license>GPLv3</license>
 	<version>0.1</version>
-	<description>COM_WEEVER_CARTOGRAPHER_DESCRIPTION</description>
+	<description>COM_WEEVERCARTOGRAPHER_DESCRIPTION</description>
+	
+	<administration>
+	
+		<files folder="admin">
+			<filename>install.sql</filename>
+			<filename>index.html</filename>
+		</files>
+	
+	</administration>
 	
 	<files folder="site">
 		<filename>weevercartographer.php</filename>

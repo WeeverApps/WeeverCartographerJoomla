@@ -26,8 +26,8 @@ jimport('joomla.application.component.model');
 class WeeverCartographerModelFeed extends JModel
 {
 
-	public 	$feedData;
-	private	$db;
+	public 		$feedData;
+	protected	$db;
 	
 	public function __construct() {
 	
@@ -61,12 +61,31 @@ class WeeverCartographerModelFeed extends JModel
 	
 	}
 	
+	private function convertToLatLong(&$obj) {
+	
+		$point = rtrim( ltrim( $obj->location, "(POINT" ), ")" );
+		$point = explode(" ", $point);
+		$obj->latitude = $point[0];
+		$obj->longitude = $point[1];
+	
+	}
+	
 	private function buildProximityFeed() {
 	
 		$com 		= JRequest::getVar('component');
 		$comIds 	= explode( ',', JRequest::getVar('id') );
 		
-		$query = "SELECT *, 
+		foreach($comIds as $k=>$v)
+		{
+		
+			$id[$v] = 1;
+		
+		}
+		
+		if(!$com)
+			$com = "com_content";
+		
+		$query = "SELECT component_id, AsText(location) AS location, address, label, kml, marker, 
 					glength( linestringfromwkb( linestring( 
 						GeomFromText('POINT(45.123 54.262)'), 
 					location ) ) ) as 'distance' ".
@@ -76,17 +95,20 @@ class WeeverCartographerModelFeed extends JModel
 					component = ".$this->db->quote($com)." ".
 				"ORDER BY
 					distance ASC ";
-	
+
 		$this->db->setQuery($query);
 		$results = $this->db->loadObjectList();
 		
 		if( empty($results) )
 			return false;
 			
-		foreach( (object) $results as $k=>$v ) {
+		foreach( (array) $results as $k=>$v ) 
+		{
 		
-			if( !isset($comIds[$v->id]) )
-				unset($results->$k);
+			if( !isset($id[$v->component_id]) )
+				unset($results[$k]);
+				
+			$this->convertToLatLong($results[$k]);
 		
 		}
 		

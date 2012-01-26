@@ -23,21 +23,22 @@ defined('_JEXEC') or die;
 
 jimport('joomla.application.component.view');
 
-class WeeverCartographerViewConfig extends JView
+class WeeverCartographerViewFeed extends JView
 {
 
 	public function display($tpl = null)
 	{
 
 		$feedData = $this->get('feedData');
+		$json = new WeeverCartographerJsonResult();
+		$json->results = $feedData;
 		
-		if($feedData)
-			$json = json_encode($feedData);
-		else 
-			$json = json_encode(null);
+		$json = json_encode($json);
+			
+		$jsonp = WeeverCartographerHelper::wrapJsonP( $json, JRequest::getVar("callback", "callback") );
 		
 		// output JSON feed, gracefully exit
-		print_r($json);
+		print_r($jsonp);
 		jexit();
 
 	
