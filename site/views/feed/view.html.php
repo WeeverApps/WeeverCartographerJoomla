@@ -29,7 +29,12 @@ class WeeverCartographerViewConfig extends JView
 	public function display($tpl = null)
 	{
 
-		$json = json_encode( $this->get('feedData') );
+		$feedData = $this->get('feedData');
+		
+		if($feedData)
+			$json = json_encode($feedData);
+		else 
+			$json = json_encode(null);
 		
 		// output JSON feed, gracefully exit
 		print_r($json);

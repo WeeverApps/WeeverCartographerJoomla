@@ -29,8 +29,7 @@ jimport('joomla.application.component.controller');
 class WeeverCartographerController extends JController
 {
 
-	public function display()
-	{
+	public function display() {
 	
 		$view = JRequest::getVar('view');
 		

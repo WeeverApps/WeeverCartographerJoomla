@@ -29,8 +29,7 @@ class WeeverCartographerModelFeed extends JModel
 	public 	$feedData;
 	private	$db;
 	
-	public function __construct()
-	{
+	public function __construct() {
 	
 		parent::__construct();
 		
@@ -39,22 +38,22 @@ class WeeverCartographerModelFeed extends JModel
 	
 	}
 	
-	private function selectMethod($method = 'proximity')
-	{
+	public function getFeedData() {
+	
+		return $this->feedData;
+	
+	}
+	
+	private function selectMethod($method = 'proximity') {
 	
 		switch($method) 
 		{
 		
-			case "geotag":
-			
-				$this->buildGeotagFeed();
-				
-				break;
 		
 			case "proximity":
 			default:
 			
-				$this->buildProximityFeed();
+				$this->feedData = $this->buildProximityFeed();
 				
 				break;
 		
@@ -62,30 +61,39 @@ class WeeverCartographerModelFeed extends JModel
 	
 	}
 	
-	
-	private function buildGeotagFeed() {
-	
-	
-	}
-	
 	private function buildProximityFeed() {
 	
-		$component = JRequest::getVar('component');
-		$component = JRequest::getVar('component_id');
+		$com 		= JRequest::getVar('component');
+		$comIds 	= explode( ',', JRequest::getVar('id') );
+		
+		$query = "SELECT *, 
+					glength( linestringfromwkb( linestring( 
+						GeomFromText('POINT(45.123 54.262)'), 
+					location ) ) ) as 'distance' ".
+				"FROM
+					#__weever_maps ".
+				"WHERE
+					component = ".$this->db->quote($com)." ".
+				"ORDER BY
+					distance ASC ";
 	
-		//$this->db = 
-	
-		/*
+		$this->db->setQuery($query);
+		$results = $this->db->loadObjectList();
 		
-		// search code for distance...
+		if( empty($results) )
+			return false;
+			
+		foreach( (object) $results as $k=>$v ) {
 		
-		SELECT *,  glength( linestringfromwkb( linestring( GeomFromText('POINT(45.123 54.262)'), location ) ) ) as 'distance'
-		FROM
-		jos_weever_maps
-		ORDER BY
-		distance
+			if( !isset($comIds[$v->id]) )
+				unset($results->$k);
 		
-		*/
+		}
+		
+		if( empty($results) )
+			return false;
+		
+		return $results;
 	
 	
 	}
