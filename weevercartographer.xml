@@ -13,6 +13,8 @@
 	
 	<administration>
 	
+		<menu link="com_weevercartographer" img="components/com_weever/assets/icons/icon-16-weever_menu_logo.png">COM_WEEVERCARTOGRAPHER_MENU</menu>
+	
 		<files folder="admin">
 			<filename>install.sql</filename>
 			<filename>index.html</filename>
