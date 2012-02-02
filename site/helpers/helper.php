@@ -31,6 +31,34 @@ class WeeverCartographerHelper {
 		return $callback."(".$string.")";	
 	
 	}
+	
+	public static function joomlaVersion() 
+	{
+	
+		$version = new JVersion;
+		$joomla = $version->getShortVersion();
+		
+		return $joomla;
+	
+	}
+	
+	function getParams($option){
+		
+		if(self::joomlaVersion != "1.5")
+		{
+		
+			$app = JFactory::getApplication('site');
+			$params =  &$app->getParams($option);
+			
+		}
+		else 
+		{
+			$params = &JComponentHelper::getParams($option);
+		}
+		
+		return $params;
+		
+	}
 
 
 }
